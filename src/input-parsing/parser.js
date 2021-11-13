@@ -74,7 +74,7 @@ export default class CliParser {
 
   getConfigActions(configInput) {
     const actions = configInput.split('-');
-    const actionRegexp = /^A$|^C\d+$|^R\d+$/;
+    const actionRegexp = /^A$|^C[0|1]$|^R[0|1]$/;
     actions.forEach((action) => {
       if (!actionRegexp.test(action)) {
         throw new CustomError(

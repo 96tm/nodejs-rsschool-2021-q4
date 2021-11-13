@@ -16,7 +16,6 @@ export default function main() {
   const parser = new CliParser();
   const args = process.argv.slice(2).join(' ');
   const { actions, inputStream, outputStream } = parser.parse(' ' + args);
-  console.log(Object.is(inputStream, process.stdin));
   const promisifyPipeline = promisify(pipeline);
   promisifyPipeline(
     inputStream,
