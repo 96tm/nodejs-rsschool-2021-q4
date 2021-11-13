@@ -1,1 +1,0 @@
-export const APP_ERROR_CODE = 1;

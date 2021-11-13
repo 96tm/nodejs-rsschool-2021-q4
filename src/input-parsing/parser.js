@@ -1,14 +1,17 @@
-import { CustomError } from './custom-error.js';
-import InputChecker from './input-checker.js';
+import { CustomError } from '../utils/custom-error.js';
+import ArgumentsChecker from './arguments-checker.js';
 import FileHandler from './file-handler.js';
 
 export default class CliParser {
-  static CONFIG_ARGUMENTS_PATTERN = /(?<=\s)-c(?:(?:\s+([^-]\S*)?)|$)|(?<=\s)--config(?:(?:\s+([^-]\S*)?)|$)/;
-  static INPUT_PATH_ARGUMENTS_PATTERN = /(?<=\s)-i(?:(?:\s+([^-].*)?)|$)|(?<=\s)--input(?:(?:\s+([^-].*)?)|$)/;
-  static OUTPUT_PATH_ARGUMENTS_PATTERN = /(?<=\s)-o(?:(?:\s+([^-].*)?)|$)|(?<=\s)--output(?:(?:\s+([^-].*)?)|$)/;
+  static CONFIG_ARGUMENTS_PATTERN =
+    /(?<=\s)-c(?:(?:\s+([^-]\S*)?)|$)|(?<=\s)--config(?:(?:\s+([^-]\S*)?)|$)/;
+  static INPUT_PATH_ARGUMENTS_PATTERN =
+    /(?<=\s)-i(?:(?:\s+([^-]\S*)?)|$)|(?<=\s)--input(?:(?:\s+([^-]\S*)?)|$)/;
+  static OUTPUT_PATH_ARGUMENTS_PATTERN =
+    /(?<=\s)-o(?:(?:\s+([^-]\S*)?)|$)|(?<=\s)--output(?:(?:\s+([^-]\S*)?)|$)/;
 
   parse(input) {
-    let duplicateOption = InputChecker.checkDuplicateOptions(input);
+    let duplicateOption = ArgumentsChecker.checkDuplicateOptions(input);
     if (duplicateOption) {
       throw new CustomError(
         `Duplicate option: ${duplicateOption.short} or ${duplicateOption.long} must occur at most once`
@@ -19,14 +22,19 @@ export default class CliParser {
     const outputPath = this.parseOutputPath(input);
     let inputStream = FileHandler.createReadStream(inputPath);
     let outputStream = FileHandler.createWriteStream(outputPath);
+    return { actions: configActions, inputStream, outputStream };
   }
 
   parseConfig(input) {
     const result = input.match(CliParser.CONFIG_ARGUMENTS_PATTERN);
     const configInput = result?.[1] || result?.[2];
-    if (!configInput) {
+    if (!result) {
       throw new CustomError(
         `'Config' option not found. Enter '-c' or '--config' followed by an argument`
+      );
+    } else if (!configInput) {
+      throw new CustomError(
+        `Value for 'Config' option is not specified. Enter '-c' or '--config' followed by an argument`
       );
     }
     const configActions = this.getConfigActions(configInput);
@@ -45,7 +53,7 @@ export default class CliParser {
     );
     if (parsed && !path) {
       throw new CustomError(
-        `File name for 'Input' option not specified.\nEnter '-i' or '--input' followed by a file name`
+        `File name for 'Input' option is not specified.\nEnter '-i' or '--input' followed by a file name`
       );
     }
     return path;
@@ -58,7 +66,7 @@ export default class CliParser {
     );
     if (parsed && !path) {
       throw new CustomError(
-        `File name for 'Output' option not specified.\nEnter '-o' or '--output' followed by a file name`
+        `File name for 'Output' option is not specified.\nEnter '-o' or '--output' followed by a file name`
       );
     }
     return path;
