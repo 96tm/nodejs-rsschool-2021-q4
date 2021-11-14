@@ -1,4 +1,5 @@
-import fs from 'fs';
+import CustomInputStream from '../streams/file-streams/custom-input-stream.js';
+import CustomOutputStream from '../streams/file-streams/custom-output-stream.js';
 import { CustomError } from '../utils/custom-error.js';
 
 export default class FileHandler {
@@ -6,7 +7,7 @@ export default class FileHandler {
     if (!path) {
       return process.stdin;
     }
-    const inputStream = fs.createReadStream(path);
+    const inputStream = new CustomInputStream(path);
     inputStream.on('error', (err) => {
       if (err.code === 'EISDIR') {
         throw new CustomError(
@@ -29,7 +30,7 @@ export default class FileHandler {
     if (!path) {
       return process.stdout;
     }
-    const outputStream = fs.createWriteStream(path, { flags: 'a' });
+    const outputStream = new CustomOutputStream(path);
     outputStream.on('error', (err) => {
       if (err.code === 'EISDIR') {
         throw new CustomError(

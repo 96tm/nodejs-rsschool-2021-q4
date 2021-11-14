@@ -20,6 +20,17 @@ export default class CliParser {
     let configActions = this.parseConfig(input);
     const inputPath = this.parseInputPath(input);
     const outputPath = this.parseOutputPath(input);
+    const duplicateFilePaths = ArgumentsChecker.checkDuplicateFilePaths(
+      inputPath,
+      outputPath
+    );
+    if (duplicateFilePaths) {
+      throw new CustomError('Input and output files must be different');
+    }
+    const invalidOption = ArgumentsChecker.checkInvalidOptions(input);
+    if (invalidOption) {
+      throw new CustomError(`Invalid option ${invalidOption}`);
+    }
     let inputStream = FileHandler.createReadStream(inputPath);
     let outputStream = FileHandler.createWriteStream(outputPath);
     return { actions: configActions, inputStream, outputStream };

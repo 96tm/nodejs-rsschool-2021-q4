@@ -1,10 +1,31 @@
 export default class ArgumentsChecker {
   static DUPLICATE_CONFIG_OPTION_PATTERN =
-    /((?<=\s)-c(?=\s))|((?<=\s)--config(?=\s))/g;
+    /((?<=\s)-c(\s+|$))|((?<=\s)--config(\s+|$))/g;
   static DUPLICATE_INPUT_OPTION_PATTERN =
-    /((?<=\s)-i(?=\s))|((?<=\s)--input(?=\s))/g;
+    /((?<=\s)-i(\s+|$))|((?<=\s)--input(\s+|$))/g;
   static DUPLICATE_OUTPUT_OPTION_PATTERN =
-    /((?<=\s)-o(?=\s))|((?<=\s)--output(?=\s))/g;
+    /((?<=\s)-o(\s+|$))|((?<=\s)--output(\s+|$))/g;
+  static OPTIONS_PATTERN = /(?<=\s+)(?:(-\S*)|(--\S*))(?=\s+|$)/g;
+
+  static checkInvalidOptions(input) {
+    const options = input.match(ArgumentsChecker.OPTIONS_PATTERN);
+    const validOptionsSet = new Set([
+      '-c',
+      '-i',
+      '-o',
+      '--config',
+      '--input',
+      '--output',
+    ]);
+    const invalidOption = options.find(
+      (option) => !validOptionsSet.has(option)
+    );
+    return invalidOption;
+  }
+
+  static checkDuplicateFilePaths(inputPath, outputPath) {
+    return inputPath && outputPath && inputPath === outputPath;
+  }
 
   static checkDuplicateOptions(input) {
     if (

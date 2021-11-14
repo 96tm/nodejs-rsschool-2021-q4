@@ -4,9 +4,6 @@
   "description": "",
   "main": "my_ciphering_cli.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/96tm/nodejs-rsschool-2021-q4.git"
