@@ -7,7 +7,7 @@ import actionToStream from './utils/action-to-stream.js';
 
 process.on('uncaughtExceptionMonitor', (err) => {
   if (err instanceof CustomError) {
-    process.stdin.write(err.message + '\n');
+    process.stderr.write(err.message + '\n');
     process.exit(APP_ERROR_CODE);
   }
 });
