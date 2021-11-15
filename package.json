@@ -1,0 +1,21 @@
+{
+  "name": "nodejs-rsschool-2021-q4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "my_ciphering_cli.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/96tm/nodejs-rsschool-2021-q4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/96tm/nodejs-rsschool-2021-q4/issues"
+  },
+  "homepage": "https://github.com/96tm/nodejs-rsschool-2021-q4#readme",
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
+}
